@@ -11,22 +11,7 @@ This project implements a cloud-based DNA sequence alignment pipeline that:
 - Runs compute workloads on scalable EC2 instances
 - Provides monitoring and logging through CloudWatch
 
-## 🏗️ Architecture
-
-```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   S3 Input  │───▶│ EC2 Compute │───▶│ S3 Results  │
-│   Bucket    │    │  Instances  │    │   Bucket    │
-└─────────────┘    └─────────────┘    └─────────────┘
-                           │
-                           ▼
-                   ┌─────────────┐
-                   │ CloudWatch  │
-                   │ Monitoring  │
-                   └─────────────┘
-```
-
-## 📋 Prerequisites
+## Prerequisites
 
 Before starting, ensure you have:
 - **AWS Account** with Free Tier access
@@ -35,7 +20,7 @@ Before starting, ensure you have:
 - **Python 3.8+** installed
 - **Git** for version control
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Clone and Setup
 ```bash
@@ -178,7 +163,7 @@ aws logs describe-log-groups --profile sam09
 aws cloudwatch describe-alarms --profile sam09
 ```
 
-## 🔒 Security Features
+## Security Features
 
 - **IAM Roles** with least privilege access
 - **VPC** with private subnets for compute
@@ -186,7 +171,7 @@ aws cloudwatch describe-alarms --profile sam09
 - **S3 Bucket Policies** for data protection
 - **Encryption** at rest and in transit
 
-## 💰 Cost Management
+## Cost Management
 
 This project is designed for AWS Free Tier:
 - **EC2**: t3.micro instances (750 hours/month free)
@@ -196,7 +181,7 @@ This project is designed for AWS Free Tier:
 
 Estimated monthly cost: **$0-5** (within free tier limits)
 
-## 🧪 Sample Data
+## Sample Data
 
 The project includes sample DNA sequences for testing:
 ```
@@ -204,7 +189,7 @@ data/input/sample_sequence1.fasta
 data/input/sample_sequence2.fasta
 ```
 
-## 🚨 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -231,7 +216,7 @@ pip list | grep biopython
 pip install -r requirements.txt
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/new-analysis`
@@ -240,7 +225,7 @@ pip install -r requirements.txt
 5. Push: `git push origin feature/new-analysis`
 6. Create a Pull Request
 
-## 📖 Learning Resources
+## Learning Resources
 
 This project demonstrates AWS SAA-C03 concepts:
 - **Compute**: EC2, Auto Scaling Groups
@@ -250,17 +235,13 @@ This project demonstrates AWS SAA-C03 concepts:
 - **Monitoring**: CloudWatch, SNS
 - **Infrastructure as Code**: Terraform
 
-## 📄 License
+## Author
 
-This project is open-source and available under the [MIT License](LICENSE).
-
-## 👤 Author
-
-**Sam Servo**
+**Samantha Servo**
 - GitHub: [@samservo09](https://github.com/samservo09)
 - Email: samanthaservo09@gmail.com
 
-## ✅ Reproducibility Checklist
+## Reproducibility Checklist
 
 - [ ] AWS Free Tier account configured
 - [ ] AWS CLI installed and configured with profile
@@ -275,4 +256,4 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 ---
 
-**🎯 Success Criteria**: After following these instructions, you should be able to deploy the infrastructure, process sample DNA sequences, and view results in your AWS account within 15-20 minutes.
+**Success Criteria**: After following these instructions, you should be able to deploy the infrastructure, process sample DNA sequences, and view results in your AWS account within 15-20 minutes.
