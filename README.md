@@ -4,23 +4,23 @@
 
 This project is a hands-on guide for bioinformaticians, researchers, and cloud engineers. It demonstrates how to evolve a simple, local DNA alignment script into a robust, high-performance, and cost-effective cloud architecture on AWS.
 
-This repository contains all the code and infrastructure-as-code (Terraform) files for the accompanying blog post: **[Your Blog Post Title Here]**
+This repository contains all the code and infrastructure-as-code (Terraform) files for the accompanying blog post: **From Lab PC to Serverless: DNA Sequence Alignment on AWS**
 
 ---
 
 ## The Scenario
 
-[cite_start]You're a new member of Project GenomPH, a small research group at a state university[cite: 13]. [cite_start]The team's current "system" is... chaotic[cite: 20]:
-* [cite_start]A single, borrowed, legacy lab PC[cite: 15].
-* [cite_start]Data is stored on various external hard drives[cite: 16].
-* [cite_start]A spreadsheet is used to track file names (with no versioning)[cite: 17].
-* [cite_start]Every week, someone asks, "Wait, who has the latest copy of the FASTA file?"[cite: 18, 19].
+You're a new member of Project GenomPH, a small research group at a state universityThe team's current "system" is... chaotic:
+* A single, borrowed, legacy lab PC[cite: 15].
+* Data is stored on various external hard drives[cite: 16].
+* A spreadsheet is used to track file names (with no versioning)[cite: 17].
+* Every week, someone asks, "Wait, who has the latest copy of the FASTA file?"[cite: 18, 19].
 
 Your goal is to modernize this workflow to be:
-1.  [cite_start]**Cost-Optimized** (You're all students!) [cite: 23]
-2.  [cite_start]**High-Performing** (No more waiting hours for a script to fail) [cite: 24]
-3.  [cite_start]**Resilient** (No more anxiety when you hit "run") [cite: 24]
-4.  [cite_start]**Secure** (Protecting your research data) [cite: 24]
+1.  **Cost-Optimized** (You're all students!) [cite: 23]
+2.  **High-Performing** (No more waiting hours for a script to fail) [cite: 24]
+3.  **Resilient** (No more anxiety when you hit "run") [cite: 24]
+4.  **Secure** (Protecting your research data) [cite: 24]
 
 ---
 
@@ -29,16 +29,16 @@ Your goal is to modernize this workflow to be:
 This project evolves through three distinct labs, each in its own directory.
 
 * **`lab1_local_setup/`**
-    [cite_start]**Goal:** Simulate the current setup[cite: 7]. We run a Python script locally that uses `subprocess` to call a real bioinformatics tool (**EMBOSS `needle`**) to perform an alignment.
-    * [cite_start]**Architecture:** Your PC[cite: 35, 38].
+    **Goal:** Simulate the current setup[cite: 7]. We run a Python script locally that uses `subprocess` to call a real bioinformatics tool (**EMBOSS `needle`**) to perform an alignment.
+    **Architecture:** Your PC[cite: 35, 38].
 
 * **`lab2_lift_and_shift/`**
-    **Goal:** The first step into the cloud. [cite_start]We "lift and shift" the exact same script to an **EC2 instance** and use an **S3 bucket** for storage[cite: 8, 49].
+    **Goal:** The first step into the cloud. We "lift and shift" the exact same script to an **EC2 instance** and use an **S3 bucket** for storage[cite: 8, 49].
     * [cite_start]**Architecture:** EC2 runs the Python script, which reads/writes from S3[cite: 85, 86, 87].
 
 * **`lab3_serverless/`**
-    **Goal:** Go fully serverless. [cite_start]A file upload to S3 automatically triggers an **AWS Lambda** function, which performs the alignment (using a Python-native library, `parasail`) and saves the results to **DynamoDB**[cite: 10, 103].
-    * [cite_start]**Architecture:** `S3 Event` -> `Lambda` -> `DynamoDB`[cite: 114, 115, 118].
+    **Goal:** Go fully serverless. A file upload to S3 automatically triggers an **AWS Lambda** function, which performs the alignment (using a Python-native library, `parasail`) and saves the results to **DynamoDB**.
+    **Architecture:** `S3 Event` -> `Lambda` -> `DynamoDB`.
 
 * **`lab4_advanced_workflow/`**
     **Goal:** The "real-world" solution. This architecture addresses the limitations of Lab 3 (e.g., Lambda's 15-min timeout) by using **AWS Batch** for heavy computation and **AWS Step Functions** for orchestration.
@@ -82,4 +82,4 @@ This project evolves through three distinct labs, each in its own directory.
 
 ## ⚠️ Disclaimer
 
-[cite_start]This project is a conceptual proof-of-concept designed for learning[cite: 26]. The alignment scripts are simple wrappers. [cite_start]Real-world bioinformatics pipelines are highly complex and use established tools like GATK, BWA, and BLAST, often orchestrated with workflow managers[cite: 27, 28]. This project aims to show how the *cloud architecture* supporting those tools can be built and scaled.
+This project is a conceptual proof-of-concept designed for learning[cite: 26]. The alignment scripts are simple wrappers. Real-world bioinformatics pipelines are highly complex and use established tools like GATK, BWA, and BLAST, often orchestrated with workflow managers[cite: 27, 28]. This project aims to show how the *cloud architecture* supporting those tools can be built and scaled.
