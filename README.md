@@ -17,10 +17,10 @@ You're a new member of Project GenomPH, a small research group at a state univer
 * Every week, someone asks, "Wait, who has the latest copy of the FASTA file?".
 
 Your goal is to modernize this workflow to be:
-1.  **Cost-Optimized** (You're all students!) [cite: 23]
-2.  **High-Performing** (No more waiting hours for a script to fail) [cite: 24]
-3.  **Resilient** (No more anxiety when you hit "run") [cite: 24]
-4.  **Secure** (Protecting your research data) [cite: 24]
+1.  **Cost-Optimized** (You're all students!)
+2.  **High-Performing** (No more waiting hours for a script to fail)
+3.  **Resilient** (No more anxiety when you hit "run")
+4.  **Secure** (Protecting your research data) 
 
 ---
 
@@ -29,12 +29,12 @@ Your goal is to modernize this workflow to be:
 This project evolves through three distinct labs, each in its own directory.
 
 * **`lab1_local_setup/`**
-    **Goal:** Simulate the current setup[cite: 7]. We run a Python script locally that uses `subprocess` to call a real bioinformatics tool (**EMBOSS `needle`**) to perform an alignment.
-    **Architecture:** Your PC[cite: 35, 38].
+    **Goal:** Simulate the current setup. We run a Python script locally that uses `subprocess` to call a real bioinformatics tool (**EMBOSS `needle`**) to perform an alignment.
+    **Architecture:** Your PC.
 
 * **`lab2_lift_and_shift/`**
-    **Goal:** The first step into the cloud. We "lift and shift" the exact same script to an **EC2 instance** and use an **S3 bucket** for storage[cite: 8, 49].
-    * [cite_start]**Architecture:** EC2 runs the Python script, which reads/writes from S3[cite: 85, 86, 87].
+    **Goal:** The first step into the cloud. We "lift and shift" the exact same script to an **EC2 instance** and use an **S3 bucket** for storage.
+    **Architecture:** EC2 runs the Python script, which reads/writes from S3.
 
 * **`lab3_serverless/`**
     **Goal:** Go fully serverless. A file upload to S3 automatically triggers an **AWS Lambda** function, which performs the alignment (using a Python-native library, `parasail`) and saves the results to **DynamoDB**.
@@ -82,4 +82,4 @@ This project evolves through three distinct labs, each in its own directory.
 
 ## ⚠️ Disclaimer
 
-This project is a conceptual proof-of-concept designed for learning[cite: 26]. The alignment scripts are simple wrappers. Real-world bioinformatics pipelines are highly complex and use established tools like GATK, BWA, and BLAST, often orchestrated with workflow managers[cite: 27, 28]. This project aims to show how the *cloud architecture* supporting those tools can be built and scaled.
+This project is a conceptual proof-of-concept designed for learning. The alignment scripts are simple wrappers. Real-world bioinformatics pipelines are highly complex and use established tools like GATK, BWA, and BLAST, often orchestrated with workflow managers. This project aims to show how the *cloud architecture* supporting those tools can be built and scaled.
