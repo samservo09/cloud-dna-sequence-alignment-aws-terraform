@@ -65,8 +65,8 @@ This project evolves through three distinct labs, each in its own directory.
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/samservo09/cloud-dna-sequence-alignment-aws-terraform.git](https://github.com/samservo09/cloud-dna-sequence-alignment-aws-terraform.git)
-    cd saas-dna-project
+    git clone https://github.com/samservo09/cloud-dna-sequence-alignment-aws-terraform.git
+    cd cloud-dna-sequence-alignment-aws-terraform
     ```
 
 2.  **Navigate to a Lab directory:**
