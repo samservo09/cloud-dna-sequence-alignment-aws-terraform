@@ -1,259 +1,85 @@
-# Cloud DNA Sequence Alignment with AWS & Terraform
+# 🧬 Cloud-based DNA Sequence Alignment on AWS
 
-A bioinformatics proof-of-concept performing DNA sequence alignment using Python and Biopython, deployed on AWS infrastructure provisioned with Terraform. This project demonstrates AWS Solutions Architect Associate (SAA-C03) skills including scalable EC2 compute, secure S3 storage, and infrastructure as code for cloud-based biological data analysis.
+**From a local Lab PC to a scalable, event-driven pipeline on AWS using Terraform.**
 
-## 🧬 Project Overview
+This project is a hands-on guide for bioinformaticians, researchers, and cloud engineers. It demonstrates how to evolve a simple, local DNA alignment script into a robust, high-performance, and cost-effective cloud architecture on AWS.
 
-This project implements a cloud-based DNA sequence alignment pipeline that:
-- Processes FASTA/FASTQ files containing DNA sequences
-- Performs pairwise and multiple sequence alignments using Biopython
-- Stores input data and results in S3 buckets with proper lifecycle management
-- Runs compute workloads on scalable EC2 instances
-- Provides monitoring and logging through CloudWatch
-
-## Prerequisites
-
-Before starting, ensure you have:
-- **AWS Account** with Free Tier access
-- **AWS CLI v2.x** installed
-- **Terraform v1.12+** installed
-- **Python 3.8+** installed
-- **Git** for version control
-
-## Quick Start
-
-### 1. Clone and Setup
-```bash
-git clone git@github-samservo09:samservo09/cloud-dna-sequence-alignment-aws-terraform.git
-cd cloud-dna-sequence-alignment-aws-terraform
-```
-
-### 2. Environment Setup
-```powershell
-# Windows PowerShell
-.\setup-env.ps1
-
-# Or manually:
-$env:AWS_PROFILE = "sam09"  # Replace with your profile
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-```
-
-### 3. Configure AWS
-```bash
-aws configure --profile sam09  # Replace with your preferred profile name
-# Enter your AWS Access Key ID, Secret Access Key, and region (e.g., ap-southeast-1)
-
-# Verify configuration
-aws sts get-caller-identity --profile sam09
-```
-
-### 4. Deploy Infrastructure
-```bash
-cd terraform
-terraform init
-terraform plan
-terraform apply
-```
-
-### 5. Run DNA Analysis
-```bash
-python src/dna_alignment.py
-```
-
-## 📁 Project Structure
-
-```
-├── README.md                   # This file
-├── .gitignore                  # Git ignore rules
-├── .env                        # Environment variables (not tracked)
-├── setup-env.ps1              # Environment setup script
-├── requirements.txt            # Python dependencies
-├── terraform/                  # Infrastructure as Code
-│   ├── main.tf                 # Main Terraform configuration
-│   ├── variables.tf            # Input variables
-│   ├── outputs.tf             # Output values
-│   ├── terraform.tfvars.example # Example variables
-│   └── modules/               # Reusable Terraform modules
-│       ├── vpc/               # VPC and networking
-│       ├── security/          # IAM roles and security groups
-│       ├── compute/           # EC2 instances and Auto Scaling
-│       ├── storage/           # S3 buckets and policies
-│       └── monitoring/        # CloudWatch and SNS
-├── src/                       # Python source code
-│   ├── dna_alignment.py       # Main application
-│   ├── requirements.txt       # Python dependencies
-│   └── utils/                 # Utility functions
-├── data/                      # Data directory
-│   ├── input/                 # Sample DNA sequences
-│   └── output/                # Alignment results
-└── scripts/                   # Automation scripts
-    ├── deploy.sh              # Deployment automation
-    └── cleanup.sh             # Resource cleanup
-```
-
-## 🔧 Configuration
-
-### Environment Variables
-Copy `.env` and customize:
-```bash
-AWS_PROFILE=sam09
-AWS_DEFAULT_REGION=ap-southeast-1
-TF_VAR_environment=dev
-TF_VAR_project_name=dna-sequence-alignment
-```
-
-### Terraform Variables
-Copy `terraform/terraform.tfvars.example` to `terraform/terraform.tfvars`:
-```hcl
-environment    = "dev"
-project_name   = "dna-alignment"
-instance_type  = "t3.micro"  # Free tier eligible
-region         = "ap-southeast-1"
-```
-
-## 💻 Local Development
-
-### Python Environment
-```bash
-# Activate virtual environment
-source venv/bin/activate  # Linux/Mac
-# or
-.\venv\Scripts\Activate.ps1  # Windows PowerShell
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run tests
-python -m pytest tests/
-
-# Run alignment script
-python src/dna_alignment.py
-```
-
-### Terraform Commands
-```bash
-cd terraform
-
-# Initialize
-terraform init
-
-# Plan changes
-terraform plan
-
-# Apply changes
-terraform apply
-
-# Destroy resources
-terraform destroy
-```
-
-## 📊 Monitoring & Logging
-
-The project includes:
-- **CloudWatch Dashboards** for infrastructure monitoring
-- **CloudWatch Logs** for application logs
-- **SNS Notifications** for alerts
-- **S3 Access Logging** for data access auditing
-
-Access monitoring:
-```bash
-aws logs describe-log-groups --profile sam09
-aws cloudwatch describe-alarms --profile sam09
-```
-
-## Security Features
-
-- **IAM Roles** with least privilege access
-- **VPC** with private subnets for compute
-- **Security Groups** with minimal required ports
-- **S3 Bucket Policies** for data protection
-- **Encryption** at rest and in transit
-
-## Cost Management
-
-This project is designed for AWS Free Tier:
-- **EC2**: t3.micro instances (750 hours/month free)
-- **S3**: 5GB storage free
-- **CloudWatch**: Basic monitoring included
-- **Data Transfer**: 1GB out per month free
-
-Estimated monthly cost: **$0-5** (within free tier limits)
-
-## Sample Data
-
-The project includes sample DNA sequences for testing:
-```
-data/input/sample_sequence1.fasta
-data/input/sample_sequence2.fasta
-```
-
-## Troubleshooting
-
-### Common Issues
-
-**AWS Authentication Error:**
-```bash
-# Check current profile
-aws configure list
-
-# Set profile for session
-export AWS_PROFILE=sam09  # Linux/Mac
-$env:AWS_PROFILE = "sam09"  # Windows PowerShell
-```
-
-**Terraform State Lock:**
-```bash
-# If state is locked, force unlock (use carefully)
-terraform force-unlock <LOCK_ID>
-```
-
-**Python Module Not Found:**
-```bash
-# Ensure virtual environment is activated
-pip list | grep biopython
-pip install -r requirements.txt
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/new-analysis`
-3. Make changes and test thoroughly
-4. Commit: `git commit -m "Add new sequence analysis feature"`
-5. Push: `git push origin feature/new-analysis`
-6. Create a Pull Request
-
-## Learning Resources
-
-This project demonstrates AWS SAA-C03 concepts:
-- **Compute**: EC2, Auto Scaling Groups
-- **Storage**: S3, EBS
-- **Networking**: VPC, Security Groups, Subnets
-- **Security**: IAM, Policies, Encryption
-- **Monitoring**: CloudWatch, SNS
-- **Infrastructure as Code**: Terraform
-
-## Author
-
-**Samantha Servo**
-- GitHub: [@samservo09](https://github.com/samservo09)
-- Email: samanthaservo09@gmail.com
-
-## Reproducibility Checklist
-
-- [ ] AWS Free Tier account configured
-- [ ] AWS CLI installed and configured with profile
-- [ ] Terraform CLI installed
-- [ ] Python 3.8+ with virtual environment
-- [ ] All dependencies installed (`pip install -r requirements.txt`)
-- [ ] Environment variables configured (`.env` file)
-- [ ] AWS credentials tested (`aws sts get-caller-identity`)
-- [ ] Terraform initialized (`terraform init`)
-- [ ] Sample data available in `data/input/`
-- [ ] Project structure matches documentation
+This repository contains all the code and infrastructure-as-code (Terraform) files for the accompanying blog post: **[Your Blog Post Title Here]**
 
 ---
 
-**Success Criteria**: After following these instructions, you should be able to deploy the infrastructure, process sample DNA sequences, and view results in your AWS account within 15-20 minutes.
+## The Scenario
+
+[cite_start]You're a new member of Project GenomPH, a small research group at a state university[cite: 13]. [cite_start]The team's current "system" is... chaotic[cite: 20]:
+* [cite_start]A single, borrowed, legacy lab PC[cite: 15].
+* [cite_start]Data is stored on various external hard drives[cite: 16].
+* [cite_start]A spreadsheet is used to track file names (with no versioning)[cite: 17].
+* [cite_start]Every week, someone asks, "Wait, who has the latest copy of the FASTA file?"[cite: 18, 19].
+
+Your goal is to modernize this workflow to be:
+1.  [cite_start]**Cost-Optimized** (You're all students!) [cite: 23]
+2.  [cite_start]**High-Performing** (No more waiting hours for a script to fail) [cite: 24]
+3.  [cite_start]**Resilient** (No more anxiety when you hit "run") [cite: 24]
+4.  [cite_start]**Secure** (Protecting your research data) [cite: 24]
+
+---
+
+## Project Structure: The Three Labs
+
+This project evolves through three distinct labs, each in its own directory.
+
+* **`lab1_local_setup/`**
+    [cite_start]**Goal:** Simulate the current setup[cite: 7]. We run a Python script locally that uses `subprocess` to call a real bioinformatics tool (**EMBOSS `needle`**) to perform an alignment.
+    * [cite_start]**Architecture:** Your PC[cite: 35, 38].
+
+* **`lab2_lift_and_shift/`**
+    **Goal:** The first step into the cloud. [cite_start]We "lift and shift" the exact same script to an **EC2 instance** and use an **S3 bucket** for storage[cite: 8, 49].
+    * [cite_start]**Architecture:** EC2 runs the Python script, which reads/writes from S3[cite: 85, 86, 87].
+
+* **`lab3_serverless/`**
+    **Goal:** Go fully serverless. [cite_start]A file upload to S3 automatically triggers an **AWS Lambda** function, which performs the alignment (using a Python-native library, `parasail`) and saves the results to **DynamoDB**[cite: 10, 103].
+    * [cite_start]**Architecture:** `S3 Event` -> `Lambda` -> `DynamoDB`[cite: 114, 115, 118].
+
+* **`lab4_advanced_workflow/`**
+    **Goal:** The "real-world" solution. This architecture addresses the limitations of Lab 3 (e.g., Lambda's 15-min timeout) by using **AWS Batch** for heavy computation and **AWS Step Functions** for orchestration.
+    * **Architecture:** `S3 Event` -> `Step Function` -> `AWS Batch Job (Container)` -> `S3/DynamoDB`
+
+---
+
+## Tech Stack
+
+* **Orchestration:** Python (Boto3, `subprocess`), AWS Step Functions
+* **Infrastructure:** Terraform (Infrastructure-as-Code)
+* **AWS Services:**
+    * **Compute:** EC2, AWS Lambda, AWS Batch, Fargate
+    * **Storage:** S3, DynamoDB
+    * **Networking & Security:** VPC, IAM Roles, Security Groups
+* **Bioinformatics Tools:**
+    * **EMBOSS `needle`** (Lab 1 & 2): The industry-standard CLI tool for global pairwise alignment.
+    * **`parasail`** (Lab 3): A fast, pure-Python library for sequence alignment, perfect for Lambda.
+    * **`BWA`/`MAFFT`** (Lab 4): Examples of heavy-duty tools packaged in a **Docker container**.
+
+---
+
+## How to Run This Project
+
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/your-username/saas-dna-project.git](https://github.com/your-username/saas-dna-project.git)
+    cd saas-dna-project
+    ```
+
+2.  **Navigate to a Lab directory:**
+    ```bash
+    cd lab1_local_setup
+    ```
+
+3.  **Follow the instructions in that lab's dedicated `README.md` file.**
+    * **Lab 1** will require a local install of `conda` and `emboss`.
+    * **Labs 2, 3, and 4** will require you to have [Terraform](https://www.terraform.io/) and [AWS CLI](https://aws.amazon.com/cli/) installed and configured. You will simply run `terraform init` and `terraform apply`.
+
+---
+
+## ⚠️ Disclaimer
+
+[cite_start]This project is a conceptual proof-of-concept designed for learning[cite: 26]. The alignment scripts are simple wrappers. [cite_start]Real-world bioinformatics pipelines are highly complex and use established tools like GATK, BWA, and BLAST, often orchestrated with workflow managers[cite: 27, 28]. This project aims to show how the *cloud architecture* supporting those tools can be built and scaled.
