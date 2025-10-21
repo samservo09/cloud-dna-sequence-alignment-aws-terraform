@@ -47,7 +47,7 @@ This project evolves through three distinct labs, each in its own directory.
 * **Orchestration:** Python (Boto3, `subprocess`), AWS Step Functions
 * **Infrastructure:** Terraform (Infrastructure-as-Code)
 * **AWS Services:**
-    * **Compute:** EC2, AWS Lambda, AWS Batch, Fargate
+    * **Compute:** EC2, AWS Lambda
     * **Storage:** S3, DynamoDB
     * **Networking & Security:** VPC, IAM Roles, Security Groups
 * **Bioinformatics Tools:**
