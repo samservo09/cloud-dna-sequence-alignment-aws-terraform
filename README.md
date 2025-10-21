@@ -40,10 +40,6 @@ This project evolves through three distinct labs, each in its own directory.
     **Goal:** Go fully serverless. A file upload to S3 automatically triggers an **AWS Lambda** function, which performs the alignment (using a Python-native library, `parasail`) and saves the results to **DynamoDB**.
     **Architecture:** `S3 Event` -> `Lambda` -> `DynamoDB`.
 
-* **`lab4_advanced_workflow/`**
-    **Goal:** The "real-world" solution. This architecture addresses the limitations of Lab 3 (e.g., Lambda's 15-min timeout) by using **AWS Batch** for heavy computation and **AWS Step Functions** for orchestration.
-    * **Architecture:** `S3 Event` -> `Step Function` -> `AWS Batch Job (Container)` -> `S3/DynamoDB`
-
 ---
 
 ## Tech Stack
