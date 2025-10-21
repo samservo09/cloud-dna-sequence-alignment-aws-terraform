@@ -152,12 +152,12 @@ data/input/*
 data/output/*
 !data/input/.gitkeep
 !data/output/.gitkeep
-!data/input/sample_*.fasta
-*.fasta
-*.fastq
-*.fa
-*.fq
-*.seq
+# !data/input/sample_*.fasta
+# *.fasta
+# *.fastq
+# *.fa
+# *.fq
+# *.seq
 
 # Large binary files
 *.gz
