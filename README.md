@@ -11,10 +11,10 @@ This repository contains all the code and infrastructure-as-code (Terraform) fil
 ## The Scenario
 
 You're a new member of Project GenomPH, a small research group at a state universityThe team's current "system" is... chaotic:
-* A single, borrowed, legacy lab PC.
-* Data is stored on various external hard drives.
-* A spreadsheet is used to track file names (with no versioning).
-* Every week, someone asks, "Wait, who has the latest copy of the FASTA file?".
+* Borrowed, legacy lab PC that malfunctions when it senses your anxiety
+* A few external hard drives from some of your members
+* A spreadsheet software used to track sequence file names (without versioning)
+* Every week, someone asks, “Wait, sino may latest copy ng FASTA file?” (Wait, who has the latest copy of the FASTA file?)
 
 Your goal is to modernize this workflow to be:
 1.  **Cost-Optimized** (You're all students!)
