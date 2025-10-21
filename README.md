@@ -10,7 +10,7 @@ This repository contains all the code and infrastructure-as-code (Terraform) fil
 
 ## The Scenario
 
-You're a new member of Project GenomPH, a small research group at a state universityThe team's current "system" is... chaotic:
+You're a new member of Project GenomePH, a small research group at a state universityThe team's current "system" is... chaotic:
 * Borrowed, legacy lab PC that malfunctions when it senses your anxiety
 * A few external hard drives from some of your members
 * A spreadsheet software used to track sequence file names (without versioning)
