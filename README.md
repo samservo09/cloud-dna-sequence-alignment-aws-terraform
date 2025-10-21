@@ -57,8 +57,6 @@ This project evolves through three distinct labs, each in its own directory.
 * **Bioinformatics Tools:**
     * **EMBOSS `needle`** (Lab 1 & 2): The industry-standard CLI tool for global pairwise alignment.
     * **`parasail`** (Lab 3): A fast, pure-Python library for sequence alignment, perfect for Lambda.
-    * **`BWA`/`MAFFT`** (Lab 4): Examples of heavy-duty tools packaged in a **Docker container**.
-
 ---
 
 ## How to Run This Project
@@ -76,7 +74,7 @@ This project evolves through three distinct labs, each in its own directory.
 
 3.  **Follow the instructions in that lab's dedicated `README.md` file.**
     * **Lab 1** will require a local install of `conda` and `emboss`.
-    * **Labs 2, 3, and 4** will require you to have [Terraform](https://www.terraform.io/) and [AWS CLI](https://aws.amazon.com/cli/) installed and configured. You will simply run `terraform init` and `terraform apply`.
+    * **Labs 2, 3** will require you to have [Terraform](https://www.terraform.io/) and [AWS CLI](https://aws.amazon.com/cli/) installed and configured. You will simply run `terraform init` and `terraform apply`.
 
 ---
 

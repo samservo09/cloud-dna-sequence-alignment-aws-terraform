@@ -1,5 +1,0 @@
-# Lambda Layer Requirements for DNA Sequence Alignment
-# These packages will be packaged into a Lambda layer
-
-biopython==1.85
-numpy==2.3.3
