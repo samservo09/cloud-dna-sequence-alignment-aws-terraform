@@ -51,7 +51,7 @@ Migrate the local alignment script to a cloud-based EC2 instance and use S3 for 
     * The repository code (or just the script) will need to be on the instance. The `user_data.sh` (as defined in `main.tf`) should ideally clone it.
     * Run the Python script. **You must pass it your bucket name.**
         ```bash
-        # The script is pre-configured to find 'seq1.fasta' and 'seq2.fastq'
+        # The script is pre-configured to find 'seq1.fasta' and 'seq2.fasta'
         python3 align_ec2.py --bucket "your-unique-bucket-name"
         ```
 

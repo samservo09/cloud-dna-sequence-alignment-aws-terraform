@@ -27,7 +27,7 @@ Run a pairwise DNA alignment entirely on your local machine, mimicking the origi
 2.  **Add Sample Data:**
     This directory contains a `sample_data/` folder. Place your two sample FASTA files inside it.
     * `data/seq1.fasta`
-    * `data/seq2.fastq`
+    * `data/seq2.fasta`
 
 3.  **Run the Script:**
     From inside the `lab1_local_setup` directory, run the Python wrapper script.
