@@ -93,7 +93,6 @@ except subprocess.CalledProcessError as e:
     print("\nMBOSS needle failed with an error:")
     print(e.stderr)
     exit(1)
-
 print("\n" + "=" * 60)
 print("All done! Check the results directory for full output.")
 print("=" * 60)
