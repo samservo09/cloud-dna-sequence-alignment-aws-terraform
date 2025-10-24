@@ -1,98 +1,66 @@
 import subprocess
 import os
-from pathlib import Path
+import shutil
 
 # --- Configuration ---
-SAMPLE_DATA_DIR = "sample_data"
-SEQ1_FILE = os.path.join(SAMPLE_DATA_DIR, "seq1.fasta")
-SEQ2_FILE = os.path.join(SAMPLE_DATA_DIR, "seq2.fasta")
-RESULTS_DIR = "results"
-OUTPUT_FILE = os.path.join(RESULTS_DIR, "alignment_output.txt")
-NEEDLE_EXECUTABLE = "needle"  # Assumes 'needle' is in the system's PATH
+# We use os.path.join to build paths that work on any OS
+DATA_DIR = "sample_data"
+RESULT_DIR = "results"
+SEQ1_PATH = os.path.join(DATA_DIR, "seq1.fasta")
+SEQ2_PATH = os.path.join(DATA_DIR, "seq2.fasta")
+RESULT_PATH = os.path.join(RESULT_DIR, "alignment_output.txt")
 
-# --- Main Script ---
-print("Lab 1: Local DNA Sequence Alignment")
-print("=" * 60)
+# EMBOSS 'needle' command parameters
+GAP_OPEN_PENALTY = 10.0
+GAP_EXTEND_PENALTY = 0.5
 
-# Create results directory
-os.makedirs(RESULTS_DIR, exist_ok=True)
+# Find the 'needle' executable from our Conda environment
+# shutil.which() is the safest way to find a program in the system's PATH
+NEEDLE_EXE = shutil.which("needle")
 
-# Step 1: Check if input files exist
-print("\nStep 1: Checking input files...")
+def main():
+    print("--- Starting Lab 1: Local 'needle' Alignment (WSL) ---")
 
-if not os.path.exists(SEQ1_FILE):
-    print(f"Error: {SEQ1_FILE} not found")
-    exit(1)
-if not os.path.exists(SEQ2_FILE):
-    print(f"Error: {SEQ2_FILE} not found")
-    exit(1)
+    # --- 1. Check if 'needle' is found ---
+    if not NEEDLE_EXE:
+        print("\n[ERROR] 'needle' command not found.")
+        print("Please ensure your 'dna-env' Conda environment is active.")
+        return
 
-print(f"Found {SEQ1_FILE}")
-print(f"Found {SEQ2_FILE}")
+    print(f"Found 'needle' executable at: {NEEDLE_EXE}")
 
-# Step 2: Run EMBOSS needle alignment
-print(f"\nStep 2: Running EMBOSS needle alignment...")
+    # --- 2. Create the command to run ---
+    command = [
+        NEEDLE_EXE,
+        "-asequence", SEQ1_PATH,
+        "-bsequence", SEQ2_PATH,
+        "-gapopen", str(GAP_OPEN_PENALTY),
+        "-gapextend", str(GAP_EXTEND_PENALTY),
+        "-outfile", RESULT_PATH
+    ]
 
-command = [
-    NEEDLE_EXECUTABLE,
-    "-asequence", SEQ1_FILE,
-    "-bsequence", SEQ2_FILE,
-    "-gapopen", "10.0",
-    "-gapextend", "0.5",
-    "-outfile", OUTPUT_FILE,
-    "-aformat", "pair"  # Output format: pairwise alignment
-]
+    # --- 3. Run the command using subprocess ---
+    # Ensure the results directory exists
+    os.makedirs(RESULT_DIR, exist_ok=True)
 
-try:
-    # Check if needle is installed
-    print("  Checking for EMBOSS needle...")
-    check_needle = subprocess.run([NEEDLE_EXECUTABLE, "-version"], 
-                                  capture_output=True, 
-                                  text=True)
-    print(f"  ✓ EMBOSS needle found")
-    
-    # Run needle alignment
-    print(f"  Running alignment...")
-    result = subprocess.run(command, 
-                           capture_output=True,
-                           text=True, 
-                           check=True)
-    
-    print(f"\Alignment successful!")
-    print(f"Output saved to {OUTPUT_FILE}")
-    
-    # Display stderr (needle outputs progress info here)
-    if result.stderr:
-        print("\nNeedle output:")
-        print(result.stderr)
-    
-    # Display a preview of the results
-    print("\n" + "=" * 60)
-    print("ALIGNMENT PREVIEW")
-    print("=" * 60)
-    
-    if os.path.exists(OUTPUT_FILE):
-        with open(OUTPUT_FILE, "r") as f:
-            lines = f.readlines()
-            # Show first 30 lines of output
-            for line in lines[:30]:
-                print(line.rstrip())
-            if len(lines) > 30:
-                print("\n... (see full alignment in results file)")
+    try:
+        print(f"\nRunning command: {' '.join(command)}")
 
-except FileNotFoundError:
-    print(f"\nError: '{NEEDLE_EXECUTABLE}' not found.")
-    print("\nTo install EMBOSS needle:")
-    print("  Using Conda:  conda install -c bioconda emboss")
-    print("  Using Homebrew (macOS): brew install emboss")
-    print("  Using apt (Linux): sudo apt-get install emboss")
-    print("\nTo verify installation, run: needle -version")
-    exit(1)
-    
-except subprocess.CalledProcessError as e:
-    print("\nMBOSS needle failed with an error:")
-    print(e.stderr)
-    exit(1)
-print("\n" + "=" * 60)
-print("All done! Check the results directory for full output.")
-print("=" * 60)
+        # This is the core of the script. It runs 'needle' as a child process.
+        # check=True will automatically raise an error if 'needle' fails
+        subprocess.run(command, capture_output=True, text=True, check=True)
+
+        print("\n--- Alignment Successful! ---")
+        print(f"Output saved to: {RESULT_PATH}")
+
+    except FileNotFoundError:
+        print(f"\n[ERROR] Could not find FASTA files in '{DATA_DIR}'.")
+    except subprocess.CalledProcessError as e:
+        # This catches errors from the 'needle' tool itself
+        print(f"\n[ERROR] 'needle' failed to run:")
+        print(e.stderr)
+    except Exception as e:
+        print(f"\n[ERROR] An unexpected error occurred: {e}")
+
+if __name__ == "__main__":
+    main()
