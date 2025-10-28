@@ -64,3 +64,61 @@ Migrate the local alignment script to a cloud-based EC2 instance and use S3 for 
     ```bash
     terraform destroy
     ```
+
+## SSH Key Permissions Note for Windows/WSL Users 🔑
+If you're using WSL (Windows Subsystem for Linux) and get an SSH error like "WARNING: UNPROTECTED PRIVATE KEY FILE!" or "bad permissions" even after running chmod 400 on your .pem key file, it's likely because the key is stored on your Windows C: drive (/mnt/c/...).
+
+The Windows filesystem (NTFS) doesn't always handle Linux permissions correctly when accessed from WSL.
+
+### Solution:
+
+Copy the .pem file into your WSL filesystem. The standard location is your WSL home directory's .ssh folder:
+
+```Bash
+# Create the directory if it doesn't exist
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+
+# Copy from your Windows path (adjust path as needed)
+cp "/mnt/c/path/to/your/key.pem" ~/.ssh/key.pem
+```
+Set permissions inside WSL:
+```Bash
+
+chmod 400 ~/.ssh/key.pem
+```
+
+Use the WSL path in your SSH command:
+
+```Bash
+
+ssh -i ~/.ssh/key.pem user@host
+```
+
+This ensures the key is on a Linux filesystem where permissions work as expected for SSH. Remember to add *.pem to your .gitignore if the key is in your project folder!
+
+## Note: Installing EMBOSS (needle) on the EC2 Instance
+During my initial testing of Lab 2, the align_ec2.py script requires the EMBOSS needle alignment tool to be installed on the EC2 instance.
+
+### The Method Used (Compiling from Source on Amazon Linux 2):
+
+If the standard package managers (yum, even with EPEL enabled) cannot find the emboss package on Amazon Linux 2, the manual installation involves:
+
+1. Installing development tools (gcc, make, etc.) using sudo yum groupinstall -y "Development Tools".
+2. Installing necessary library dependencies (like zlib-devel).
+3. Downloading the EMBOSS source code (e.g., using wget).
+4. Extracting the source code (tar -zxvf ...).
+Navigating into the source directory (cd EMBOSS-...).
+5. Running the configuration script (./configure), potentially needing flags like --without-x to avoid graphical dependency issues.
+6. Compiling the code (make), which can take several minutes.
+7. Installing the compiled software (sudo make install).
+
+This process is time-consuming, requires installing extra development tools, involves finding the correct source code URL, and troubleshooting potential configuration/compilation errors (like the X11 issue).
+
+### Recommended Alternative (Using Ubuntu AMI):
+
+***This is already done since I have updated the repository.***
+
+A significantly easier approach is to use a **standard Ubuntu Server LTS AMI** instead of Amazon Linux 2 for the EC2 instance.
+
+Ubuntu's repositories typically have broader support for bioinformatics packages like EMBOSS, making installation a simple, one-line command (apt-get install -y emboss) within the user_data script. This avoids the complexities of manual compilation. Standard Ubuntu AMIs are also generally Free Tier eligible on t2.micro/t3.micro instances.
