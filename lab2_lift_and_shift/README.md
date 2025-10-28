@@ -65,6 +65,35 @@ Migrate the local alignment script to a cloud-based EC2 instance and use S3 for 
     terraform destroy
     ```
 
+## Additional Steps (if applicable to Windows users using WSL)
+1. Transfer Application to EC2: We "shifted" our application code to the new cloud server. We used the scp (Secure Copy) command to upload the local align_ec2.py script directly to the EC2 instance.
+
+```Bash
+# Example command structure
+scp -i "your-key.pem" align_ec2.py ubuntu@<ec2-public-dns>:/home/ubuntu/
+```
+
+2. Install Python Dependencies: Once on the instance, we installed the necessary Python libraries. The key library was boto3, the AWS SDK for Python, which allows the script to interact with S3.
+
+```Bash
+pip3 install boto3
+```
+
+3. Install System Dependencies: The script failed on its first run because it depends on an external bioinformatics tool, needle. We fixed this by installing the emboss (European Molecular Biology Open Software Suite) package, which provides the needle executable.
+
+```Bash
+sudo apt-get update
+sudo apt-get install emboss
+```
+
+4. Execute the Cloud Workflow: With all code and dependencies in place, we successfully ran the script. 
+
+The script performed the following workflow:
+
+- Used boto3 to download the seq1.fasta and seq2.fasta files from the S3 bucket.
+- Called the needle program locally on the EC2 instance to perform the alignment.
+- Used boto3 again to upload the alignment_results.txt file back to our S3 bucket for safekeeping.
+
 ## SSH Key Permissions Note for Windows/WSL Users 🔑
 If you're using WSL (Windows Subsystem for Linux) and get an SSH error like "WARNING: UNPROTECTED PRIVATE KEY FILE!" or "bad permissions" even after running chmod 400 on your .pem key file, it's likely because the key is stored on your Windows C: drive (/mnt/c/...).
 
@@ -122,3 +151,4 @@ This process is time-consuming, requires installing extra development tools, inv
 A significantly easier approach is to use a **standard Ubuntu Server LTS AMI** instead of Amazon Linux 2 for the EC2 instance.
 
 Ubuntu's repositories typically have broader support for bioinformatics packages like EMBOSS, making installation a simple, one-line command (apt-get install -y emboss) within the user_data script. This avoids the complexities of manual compilation. Standard Ubuntu AMIs are also generally Free Tier eligible on t2.micro/t3.micro instances.
+
