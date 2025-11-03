@@ -1,29 +1,37 @@
 name: Build Lambda Package
 
 on:
-  push: # Runs every time you push to GitHub
+  push:
+    # To save resources, let's only run this when you push changes 
+    # to the lab3_serverless folder or this workflow file.
+    paths:
+      - 'lab3_serverless/**'
+      - '.github/workflows/build-lambda.yml'
 
 jobs:
   build:
-    runs-on: ubuntu-latest # Uses a clean Linux machine
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4 # Using v4 for all actions
 
       - name: Build Lambda package using Docker
         run: |
-          # This is the same Docker command that failed locally
-          # It will work perfectly here in GitHub's clean environment
+          # This command builds the package inside a clean Linux container
           docker run --rm --entrypoint="/bin/sh" -v "$GITHUB_WORKSPACE/lab3_serverless/lambda_function":/var/task public.ecr.aws/lambda/python:3.9 -c "pip install -r /var/task/requirements.txt -t /var/task/"
-
+      
       - name: Zip the package
         run: |
+          # Zips the contents of the build folder
           cd lab3_serverless/lambda_function
           zip -r ../lambda_package.zip .
 
       - name: Upload zip file as an artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4 # <-- This is the v4 fix
         with:
+          # The name of the artifact to be uploaded
           name: lambda-package
+          
+          # The path to the file you want to upload
           path: lab3_serverless/lambda_package.zip
