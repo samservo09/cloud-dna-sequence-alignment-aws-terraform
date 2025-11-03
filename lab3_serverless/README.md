@@ -25,48 +25,110 @@ Build an automated, event-driven alignment pipeline that runs with zero servers 
 
 ## How to Run
 
-1.  **Prerequisites:**
+### 1.  **Prerequisites:**
     * [Terraform](https://www.terraform.io/) installed.
     * [AWS CLI](https://aws.amazon.com/cli/) installed and configured.
     * Python 3 and `pip` (for packaging).
 
-2.  **Package the Lambda Function:**
-    Our Lambda function has dependencies (`parasail`, `biopython`). We must create a `.zip` file containing them.
-    ```bash
-    cd lambda_function
-    
-    # Install dependencies into this local directory
-    pip install -r requirements.txt -t .
-    
-    # Create the zip file
-    zip -r ../lambda_package.zip .
-    
-    cd ..
-    ```
-    The Terraform script is configured to find and deploy `lambda_package.zip`.
+### 2. **Run with Manual Package Build**
 
-3.  **Initialize and Deploy:**
-    From inside the `lab3_serverless` directory:
-    ```bash
+Before running `terraform apply`, you must manually build the `lambda_package.zip` file. This file is required by Terraform but is not checked into Git.
+
+These instructions use `venv` (a built-in Python tool) to create a clean, temporary environment. This is the most reliable way to gather all the necessary packages and avoid `conda` or system `pip` conflicts.
+
+#### Step 1: Create and Activate a Temporary Environment
+
+From the `lab3_serverless` directory:
+
+```bash
+# Create a new virtual environment in a folder named "temp_env"
+python3 -m venv temp_env
+
+# Activate the new environment
+# On macOS/Linux:
+source temp_env/bin/activate
+# On Windows:
+.\temp_env\Scripts\activate
+```
+
+#### Step 2: Install Dependencies into the Environment
+Now, install all the packages listed in requirements.txt into this clean environment.
+
+```Bash
+pip install -r lambda_function/requirements.txt
+```
+
+#### Step 3: Copy Packages to the lambda_function Folder
+This is the key step. We will find where pip installed the packages and copy them all into our lambda_function folder, right next to our script.
+
+A. Find the package path: Run this command to find your site-packages folder and copy the output path:
+
+```Bash
+python -c "import site; print(site.getsitepackages()[0])"
+```
+Example output on macOS: 
+```Bash
+/Users/yourname/project/lab3_serverless/temp_env/lib/python3.9/site-packages Example output on Windows: C:\Users\yourname\project\lab3_serverless\temp_env\Lib\site-packages
+```
+
+B. Copy the files: Use the path you just copied in the command below.
+
+```Bash
+# On macOS/Linux:
+# (Replace <PATH_YOU_COPIED> with your actual path)
+cp -r <PATH_YOU_COPIED>/* lambda_function/
+
+# On Windows:
+# (Replace <PATH_YOU_COPIED> with your actual path)
+robocopy <PATH_YOU_COPIED> lambda_function /E /S
+```
+
+#### Step 4: Deactivate and Clean Up
+The packages are copied, so we no longer need the temporary environment.
+
+```Bash
+# Deactivate the environment
+deactivate
+
+# Delete the temporary environment folder
+# On macOS/Linux:
+rm -rf temp_env
+
+# On Windows:
+rmdir /S /Q temp_env
+```
+
+#### Step 5: Create the Zip File
+Navigate into the lambda_function folder, which now contains your script and all its dependencies.
+
+```Bash
+cd lambda_function
+zip -r ../lambda_package.zip .
+cd ..
+```
+
+### 3.  **Initialize and Deploy:**
+    ```Bash
+    # From inside the `lab3_serverless` directory:
     terraform init
     
     # You will be prompted for a unique S3 bucket name
     terraform apply
     ```
 
-4.  **Trigger the Pipeline:**
+### 4.  **Trigger the Pipeline:**
     * Go to the AWS S3 console and find your new bucket.
     * Create a folder named `input`.
     * **Upload your sample file** (e.g., `compare_pair_001.fasta`) into the `input/` folder.
     * *Note: This lab's Lambda is designed to read **one file** containing **two sequences**.*
 
-5.  **Check the Results:**
+### 5.  **Check the Results:**
     * That's it! The upload automatically triggered the entire pipeline.
     * Go to the **AWS DynamoDB** console.
     * Find the table named `dna-alignment-jobs` and click "Explore items".
     * You should see a new item with your filename and the alignment score.
 
-6.  **CLEAN UP:**
+### 6.  **CLEAN UP:**
     **This is critical.** Run `terraform destroy` to delete all resources.
     ```bash
     terraform destroy

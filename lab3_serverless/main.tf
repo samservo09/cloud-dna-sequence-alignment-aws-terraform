@@ -93,13 +93,18 @@ resource "aws_iam_role_policy" "lambda_policy" {
 
 # 4. LAMBDA FUNCTION
 resource "aws_lambda_function" "dna_align_lambda" {
-  filename         = "lambda_package.zip" # The zip file you created
+  # Use the S3 object for the function code
+  s3_bucket = aws_s3_bucket.dna_bucket.id
+  s3_key    = aws_s3_object.lambda_zip.key
+  
   function_name    = "dna-alignment-processor"
   role             = aws_iam_role.lambda_exec_role.arn
-  handler          = "lambda_handler.handler" # Assumes python file is lambda_handler.py and function is handler
-  source_code_hash = filebase64sha256("lambda_package.zip")
-  runtime          = "python3.9" # Match the runtime you built the package for
-  timeout          = 300       # 5 minutes
+  handler          = "lambda_handler.handler"
+  runtime          = "python3.9"
+  timeout          = 300
+
+  # This tells Lambda to only update when the S3 object changes
+  depends_on = [aws_s3_object.lambda_zip]
 }
 
 # 5. S3 TRIGGER FOR LAMBDA
@@ -123,4 +128,19 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   }
 
   depends_on = [aws_lambda_permission.allow_s3]
+}
+
+# -----------------------------------------------------------------------------
+# 4. UPLOAD THE LAMBDA ZIP FILE TO S3
+#    (This is the fix for the RequestEntityTooLargeException)
+# -----------------------------------------------------------------------------
+resource "aws_s3_object" "lambda_zip" {
+  bucket = aws_s3_bucket.dna_bucket.id
+  
+  # Use the local zip file as the source
+  key    = "lambda_package.zip"
+  source = "lambda_package.zip"
+  
+  # This ensures we re-upload if the file changes
+  etag = filemd5("lambda_package.zip")
 }
