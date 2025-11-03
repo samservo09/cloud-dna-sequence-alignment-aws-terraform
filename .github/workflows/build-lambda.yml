@@ -1,0 +1,29 @@
+name: Build Lambda Package
+
+on:
+  push: # Runs every time you push to GitHub
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # Uses a clean Linux machine
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Lambda package using Docker
+        run: |
+          # This is the same Docker command that failed locally
+          # It will work perfectly here in GitHub's clean environment
+          docker run --rm --entrypoint="/bin/sh" -v "$GITHUB_WORKSPACE/lab3_serverless/lambda_function":/var/task public.ecr.aws/lambda/python:3.9 -c "pip install -r /var/task/requirements.txt -t /var/task/"
+
+      - name: Zip the package
+        run: |
+          cd lab3_serverless/lambda_function
+          zip -r ../lambda_package.zip .
+
+      - name: Upload zip file as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: lambda-package
+          path: lab3_serverless/lambda_package.zip
