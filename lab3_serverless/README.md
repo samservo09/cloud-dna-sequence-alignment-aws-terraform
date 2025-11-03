@@ -73,11 +73,9 @@ Build an automated, event-driven alignment pipeline that runs with zero servers 
 
     ```
 
-    ## How to Build the Lambda Deployment Package
+## How to Build the Lambda Deployment Package
 
 This is the most critical step for Lab 3. Our Lambda function uses the `parasail` library, which contains C code. This means it **must** be compiled for the Amazon Linux operating system that Lambda runs on.
-
-You cannot just `pip install` it locally and zip the folder.
 
 You must build the `lambda_package.zip` file, which is not included in this repository. Here are two methods to build it correctly.
 
@@ -174,3 +172,4 @@ terraform init
 
 # Apply the configuration
 terraform apply
+
